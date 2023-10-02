@@ -1,0 +1,131 @@
+{% extends 'index.html'%}
+{%block content%}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-1 font-weight-bold text-primary text-center">Data Siswa SMA DUA MEI</h6>
+            {%if session['role'] == 'operator'%}
+            <a href="/addprsn" type="button" class="btn col btn-success btn-lg"><b>Tambah Siswa</b></a>
+            <hr>
+            <a href="/fr_page" type="button" class="btn col btn-info btn-lg"><b>Absen Siswa</b></a>
+            {%endif%}
+            <hr>
+
+
+            
+            {%for category, message in get_flashed_messages(with_categories=True)%}
+            <hr>
+            <div class="alert col alert-danger text-center {{ category }} " role="alert">{{ message }}</div>
+            {%endfor%}
+  
+                    
+            
+        </div>
+        
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Kelas</th>
+                            <th>Jenis Kelamin</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in data %}
+                        <tr>
+                            <td>{{ item[0] }}</td>
+                            <td>{{ item[1] }}</td>
+                            <td>{{ item[2] }}</td>
+                            <td>{{ item[3] }}</td>
+                            <td>
+                                {%if session['role'] == 'operator'%}
+                                <!--<a href="/delete/{{ item[0] }}" class="btn btn-danger" role="button" onclick="return confirm('apakah anda yakin ingin menghapus data ini?')">Delete</a> -->
+                                <a href="" class="btn btn-warning" role="button" data-bs-toggle="modal"  data-bs-target="#updatesiswa{{ item[0] }}">Edit</a>
+                                {%endif%}
+                                
+                                
+                            </td>
+                        </tr>
+                        <!-- The Modal untuk update data-->
+                        <div class="modal" id="updatesiswa{{ item[0] }}">
+                            <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                        
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                <h4 class="modal-title">UPDATE DATA SISWA</h4>
+                                </div>
+                        
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <form class="contact" action="/updatedatasiswa" method="POST">
+                                        <div class="form-group">
+                                            <input type="hidden" name="prs_nbr" class="form-control form-control-user" id="prs_nbr"
+                                                placeholder="Masukan prs_nbr" autocomplete="on" required value="{{ item.0 }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="prs_name" name="prs_name" class="form-control form-control-user" id="prs_name"
+                                                placeholder="Masukan Nama" autocomplete="on" required value="{{ item.1 }}">
+                                        </div>
+                                        <div class="form-group">                 
+                                            <select class="form-control" name="kelas" id="kelas">
+                                                <option value="XII-IPA1">XII-IPA1</option>
+                                                <option value="XII-IPS1">XII-IPS1</option>
+                                                <option value="XI-IPA1">XI-IPA1</option>
+                                                <option value="XI-IPS1">XI-IPS1</option>
+                                                <option value="X-IPA1">X-IPA1</option>
+                                                <option value="X-IPS1">X-IPS1</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="kelamin" name="kelamin" class="form-control form-control-user" id="kelamin"
+                                                placeholder="jenis kelamin" autocomplete="on" required value="{{ item.3 }}">
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <input type="hidden" name="prs_added" class="form-control form-control-user"  id="prs_added"
+                                                placeholder="prs_added" autocomplete="on" required value="{{ item.4 }}">
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <button  class="btn btn-primary btn-user btn-block" type="submit" id="form-submit">
+                                            Update</button>
+                                        </div>
+                                    </form>
+                                </div>
+                        
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                        
+                            </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Kelas</th>
+                            <th>Jenis Kelamin</th>
+                            <th>action</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}
